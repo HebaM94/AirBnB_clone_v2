@@ -1,10 +1,19 @@
 #!/usr/bin/python3
-""" Review module for the HBNB project """
+"""Review module for the HBNB project"""
 from models.base_model import BaseModel
 
 
 class Review(BaseModel):
-    """ Review classto store review information """
-    place_id = ""
-    user_id = ""
-    text = ""
+    """Review class to store review information"""
+    def __init__(
+            self,
+            place_id="",
+            user_id="",
+            text="",
+            *args,
+            **kwargs):
+        """New City instance"""
+        super().__init__(**kwargs)
+        self.place_id = place_id
+        self.user_id = user_id
+        self.text = text
