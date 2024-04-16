@@ -13,4 +13,5 @@ class City(BaseModel):
             **kwargs):
         """New City instance"""
         super().__init__(**kwargs)
+        self.state_id = state_id
         self.name = name
