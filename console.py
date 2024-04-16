@@ -137,7 +137,7 @@ class HBNBCommand(cmd.Cmd):
                 if param_value.startswith('"') and param_value.endswith('"'):
                     # String
                     param_value = param_value[1:-1].replace(
-                        '_', ' ').replace('\\"', '"')
+                        '_', ' ').replace('\"', '"')
                 elif '.' in param_value:
                     # Float
                     param_value = float(param_value)
