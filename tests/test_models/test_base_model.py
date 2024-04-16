@@ -1,7 +1,6 @@
-#!/usr/bin/python3
-""" """
-from models.base_model import BaseModel
 import unittest
+from models.base_model import BaseModel
+import models
 import datetime
 from uuid import UUID
 import json
@@ -97,3 +96,7 @@ class test_basemodel(unittest.TestCase):
         n = new.to_dict()
         new = BaseModel(**n)
         self.assertFalse(new.created_at == new.updated_at)
+
+
+if __name__ == '__main__':
+    unittest.main()
