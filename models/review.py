@@ -12,7 +12,7 @@ class Review(BaseModel):
             text="",
             *args,
             **kwargs):
-        """New City instance"""
+        """New Review instance"""
         super().__init__(**kwargs)
         self.place_id = place_id
         self.user_id = user_id
