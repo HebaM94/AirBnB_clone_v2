@@ -10,6 +10,6 @@ class Amenity(BaseModel):
             name="",
             *args,
             **kwargs):
-        """New User instance"""
+        """New Amenity instance"""
         super().__init__(**kwargs)
         self.name = name
