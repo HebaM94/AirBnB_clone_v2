@@ -6,7 +6,8 @@ from models.base_model import BaseModel
 class User(BaseModel):
     """Class defining a user"""
     def __init__(
-            self, email="",
+            self,
+            email="",
             password="",
             first_name="",
             last_name="",
