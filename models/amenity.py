@@ -10,11 +10,6 @@ class Amenity(BaseModel, Base):
     __tablename__ = "amenities"
     name = Column(String(128), nullable=False)
 
-    def __init__(
-            self,
-            name="",
-            *args,
-            **kwargs):
+    def __init__(self,*args,**kwargs):
         """New Amenity instance"""
         super().__init__(**kwargs)
-        self.name = name
