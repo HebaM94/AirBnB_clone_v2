@@ -7,7 +7,7 @@ import json
 import os
 
 
-class TestBase(unittest.TestCase):
+class TestBaseModel(unittest.TestCase):
     """Unit tests for the BaseModel."""
 
     def __init__(self, *args, **kwargs):
