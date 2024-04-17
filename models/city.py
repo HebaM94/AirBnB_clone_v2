@@ -14,13 +14,6 @@ class City(BaseModel, Base):
     places = relationship("Place", cascade="delete", backref="cities")
 
     if os.getenv("HBNB_TYPE_STORAGE") != "db":
-        def __init__(
-                    self,
-                    state_id="",
-                    name="",
-                    *args,
-                    **kwargs):
+        def __init__(*args,**kwargs):
             """New City instance"""
             super().__init__(**kwargs)
-            self.state_id = state_id
-            self.name = name
