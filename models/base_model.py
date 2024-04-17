@@ -25,10 +25,10 @@ class BaseModel:
                 if 'updated_at' in kwargs:
                     kwargs['updated_at'] = datetime.strptime(kwargs['updated_at'],
                                                      '%Y-%m-%dT%H:%M:%S.%f')
-                elif 'created_at' in kwargs:
+                if 'created_at' in kwargs:
                     kwargs['created_at'] = datetime.strptime(kwargs['created_at'],
                                                      '%Y-%m-%dT%H:%M:%S.%f')
-                elif key != '__class__':
+                if key != '__class__':
                     setattr(self, key, value)
 
     def __str__(self):
