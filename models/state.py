@@ -5,13 +5,14 @@ from sqlalchemy import Column, String
 from sqlalchemy.orm import relationship
 import os
 
+
 class State(BaseModel, Base):
     """ State class """
     if os.getenv("HBNB_TYPE_STORAGE") == "db":
         __tablename__ = 'states'
         name = Column(String(128), nullable=False)
         cities = relationship("City", cascade="all, delete", backref="state")
-    else: 
+    else:
         @property
         def cities(self):
             """getter attribute cities that returns the list of City instances

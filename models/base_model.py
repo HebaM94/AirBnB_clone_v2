@@ -23,11 +23,11 @@ class BaseModel:
         else:
             for key, value in kwargs.items():
                 if 'updated_at' in kwargs:
-                    kwargs['updated_at'] = datetime.strptime(kwargs['updated_at'],
-                                                     '%Y-%m-%dT%H:%M:%S.%f')
+                    kwargs['updated_at'] = datetime.strptime(
+                        kwargs['updated_at'],'%Y-%m-%dT%H:%M:%S.%f')
                 if 'created_at' in kwargs:
-                    kwargs['created_at'] = datetime.strptime(kwargs['created_at'],
-                                                     '%Y-%m-%dT%H:%M:%S.%f')
+                    kwargs['created_at'] = datetime.strptime(
+                        kwargs['created_at'],'%Y-%m-%dT%H:%M:%S.%f')
                 if key != '__class__':
                     setattr(self, key, value)
 
@@ -53,7 +53,7 @@ class BaseModel:
         dictionary['updated_at'] = self.updated_at.isoformat()
         dictionary.pop('_sa_instance_state', None)
         return dictionary
-    
+
     def delete(self):
         """delete the current instance from the storage"""
         from models import storage
