@@ -20,8 +20,8 @@ class TestFileStorage(unittest.TestCase):
         """ Remove storage file at end of tests """
         try:
             os.remove('file.json')
-        except:
-            pass
+        except Exception as e:
+            print("An error occurred while removing the file:", e)
 
     def test_obj_list_empty(self):
         """ __objects is initially empty """
