@@ -6,7 +6,7 @@ import os
 
 
 class TestFileStorage(unittest.TestCase):
-    """Testing FileStorage class."""
+    """Testing FileStorage class"""
 
     def setUp(self):
         """ Set up test environment """
