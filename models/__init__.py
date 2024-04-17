@@ -6,7 +6,7 @@ import os
 
 
 env = os.getenv('HBNB_TYPE_STORAGE')
-if  env == 'db':
+if env == 'db':
     storage = DBStorage()
 else:
     storage = FileStorage()
