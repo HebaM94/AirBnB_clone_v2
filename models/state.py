@@ -13,6 +13,7 @@ class State(BaseModel, Base):
     cities = relationship("City", cascade="all, delete", backref="state")
 
     if os.getenv("HBNB_TYPE_STORAGE") != "db":
+        name=""
         @property
         def cities(self):
             """getter attribute cities that returns the list of City instances
@@ -24,12 +25,3 @@ class State(BaseModel, Base):
                 if city.state_id == self.id:
                     cts.append(city)
             return cts
-
-    def __init__(
-            self,
-            name="",
-            *args,
-            **kwargs):
-        """New State instance"""
-        super().__init__(**kwargs)
-        self.name = name
