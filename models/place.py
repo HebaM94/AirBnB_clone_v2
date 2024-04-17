@@ -4,7 +4,18 @@ import os
 from models.base_model import BaseModel, Base
 from sqlalchemy import Column, Integer, Float, String, ForeignKey
 from sqlalchemy.orm import relationship
+from sqlalchemy import Table, MetaData
 
+metadata = MetaData()
+place_amenity = Table('place_amenity', Base.metadata,
+                      Column('place_id', String(60),
+                             ForeignKey('places.id'),
+                             primary_key=True,
+                             nullable=False),
+                      Column('amenity_id', String(60),
+                             ForeignKey('amenities.id'),
+                             primary_key=True,
+                             nullable=False))
 
 class Place(BaseModel, Base):
     """A place to stay"""
@@ -20,10 +31,12 @@ class Place(BaseModel, Base):
     latitude = Column(Float, nullable=True)
     longitude = Column(Float, nullable=True)
     reviews = relationship("Review", cascade="all, delete", backref="place")
+    amenities = relationship("Amenity", secondary="place_amenity", viewonly=False)
+   
     if os.getenv("HBNB_TYPE_STORAGE") != "db":
         @property
         def reviews(self):
-            """getter attribute reviews that returns the list of Review instances"""
+            """getter attribute for reviews"""
             from models import storage
             rvs = []
             reviews = storage.all("Review").values()
@@ -31,3 +44,21 @@ class Place(BaseModel, Base):
                 if review.place_id == self.id:
                     rvs.append(review)
             return rvs
+        
+        @property
+        def amenities(self):
+            """getter attribute for amenities"""
+            from models import storage
+            from models.amenity import Amenity
+            amenities_lst = []
+            ameninties = storage.all("Ameninty").values()
+            for ameninty in ameninties:
+                if ameninty.id in self.amenity_ids :
+                    amenities_lst.append(ameninty)
+            return amenities_lst
+        
+        @amenities.setattr
+        def amenities(self, obj):
+            """Adds an amenity to this Place"""
+            if isinstance(obj, Amenity):
+                self.amenity_ids.append(obj.id)
