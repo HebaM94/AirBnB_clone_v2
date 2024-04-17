@@ -8,6 +8,7 @@ import os
 env = os.getenv('HBNB_TYPE_STORAGE')
 if env == 'db':
     storage = DBStorage()
+    storage.reload()
 else:
     storage = FileStorage()
-storage.reload()
+    storage.reload()
