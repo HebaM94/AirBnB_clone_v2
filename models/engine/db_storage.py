@@ -32,19 +32,15 @@ class DBStorage:
     def all(self, cls=None):
         """Apply query on the current database session"""
         objects = {}
-        classes = {
-                    'BaseModel': BaseModel, 'User': User, 'Place': Place,
-                    'State': State, 'City': City, 'Amenity': Amenity,
-                    'Review': Review
-                  }
+        classes = (State, City, User, Place, Amenity, Review)
         if cls:
-            query = self.__session.query(classes[cls])
+            query = self.__session.query(cls)
             for obj in query.all():
                 key = "{}.{}".format(obj.__class__.__name__, obj.id)
                 objects[key] = obj
         else:
-            for name, type in classes:
-                query = self.__session.query(type)
+            for types in classes:
+                query = self.__session.query(types)
                 for obj in query.all():
                     key = "{}.{}".format(obj.__class__.__name__, obj.id)
                     objects[key] = obj
@@ -70,4 +66,3 @@ class DBStorage:
                                        expire_on_commit=False)
         Session = scoped_session(session_factory)
         self.__session = Session()
-
