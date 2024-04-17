@@ -59,7 +59,7 @@ class Place(BaseModel, Base):
                     amenities_lst.append(ameninty)
             return amenities_lst
 
-        @amenities.setattr
+        @amenities.setter
         def amenities(self, obj):
             """Adds an amenity to this Place"""
             if isinstance(obj, Amenity):
