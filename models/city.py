@@ -3,6 +3,7 @@
 from models.base_model import BaseModel, Base
 from sqlalchemy import Column, String, ForeignKey
 from sqlalchemy.orm import relationship
+import os
 
 
 
@@ -13,13 +14,6 @@ class City(BaseModel, Base):
     state_id = Column(String(60), ForeignKey("states.id"), nullable=False)
     places = relationship("Place", cascade="delete", backref="cities")
 
-    def __init__(
-            self,
-            state_id="",
-            name="",
-            *args,
-            **kwargs):
-        """New City instance"""
-        super().__init__(**kwargs)
-        self.state_id = state_id
-        self.name = name
+    if os.getenv("HBNB_TYPE_STORAGE") != "db":
+        name = ''
+        state_id = ''
