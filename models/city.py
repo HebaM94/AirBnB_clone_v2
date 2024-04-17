@@ -6,7 +6,6 @@ from sqlalchemy.orm import relationship
 import os
 
 
-
 class City(BaseModel, Base):
     """ The city class, contains state ID and name """
     __tablename__ = 'cities'
@@ -21,7 +20,7 @@ class City(BaseModel, Base):
                     name="",
                     *args,
                     **kwargs):
-                """New City instance"""
-                super().__init__(**kwargs)
-                self.state_id = state_id
-                self.name = name
+            """New City instance"""
+            super().__init__(**kwargs)
+            self.state_id = state_id
+            self.name = name
