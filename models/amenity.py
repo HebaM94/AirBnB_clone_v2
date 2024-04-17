@@ -7,6 +7,9 @@ from sqlalchemy.orm import relationship
 
 class Amenity(BaseModel, Base):
     """Class defining Amenity"""
+    __tablename__ = "amenities"
+    name = Column(String(128), nullable=False)
+
     def __init__(
             self,
             name="",
@@ -15,6 +18,3 @@ class Amenity(BaseModel, Base):
         """New Amenity instance"""
         super().__init__(**kwargs)
         self.name = name
-
-    __tablename__ = "amenities"
-    name = Column(String(128), nullable=False)

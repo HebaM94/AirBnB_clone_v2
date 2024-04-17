@@ -11,6 +11,7 @@ class State(BaseModel, Base):
     __tablename__ = 'states'
     name = Column(String(128), nullable=False)
     cities = relationship("City", cascade="all, delete", backref="state")
+
     if os.getenv("HBNB_TYPE_STORAGE") != "db":
         @property
         def cities(self):
@@ -23,3 +24,12 @@ class State(BaseModel, Base):
                 if city.state_id == self.id:
                     cts.append(city)
             return cts
+
+    def __init__(
+            self,
+            name="",
+            *args,
+            **kwargs):
+        """New State instance"""
+        super().__init__(**kwargs)
+        self.name = name
