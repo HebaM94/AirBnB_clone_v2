@@ -2,7 +2,7 @@
 """This module defines a base class for all models in our hbnb clone"""
 import uuid
 from datetime import datetime
-from sqlalchemy import Column, Integer, String, DATETIME
+from sqlalchemy import Column, String, DATETIME
 from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
@@ -27,7 +27,7 @@ class BaseModel:
                                                      '%Y-%m-%dT%H:%M:%S.%f')
             del kwargs['__class__']
             for key, value in kwargs.items():
-                if not hasattr(self, key):
+                if key != '__class__':
                     setattr(self, key, value)
             self.__dict__.update(kwargs)
 
