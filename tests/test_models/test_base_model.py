@@ -1,14 +1,15 @@
-import unittest
+#!/usr/bin/python3
+""" """
 from models.base_model import BaseModel
-import models
+import unittest
 import datetime
 from uuid import UUID
 import json
 import os
 
 
-class TestBaseModel(unittest.TestCase):
-    """Unit tests for the BaseModel."""
+class test_basemodel(unittest.TestCase):
+    """ """
 
     def __init__(self, *args, **kwargs):
         """ """
@@ -23,7 +24,7 @@ class TestBaseModel(unittest.TestCase):
     def tearDown(self):
         try:
             os.remove('file.json')
-        except FileNotFoundError:
+        except:
             pass
 
     def test_default(self):
@@ -96,7 +97,3 @@ class TestBaseModel(unittest.TestCase):
         n = new.to_dict()
         new = BaseModel(**n)
         self.assertFalse(new.created_at == new.updated_at)
-
-
-if __name__ == '__main__':
-    unittest.main()
