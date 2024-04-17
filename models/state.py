@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 """ State Module for HBNB project """
 from models.base_model import BaseModel, Base
+from models.city import City
 from sqlalchemy import Column, String
 from sqlalchemy.orm import relationship
 import os
@@ -25,11 +26,6 @@ class State(BaseModel, Base):
                     cts.append(city)
             return cts
 
-    def __init__(
-            self,
-            name="",
-            *args,
-            **kwargs):
+    def __init__(*args,**kwargs):
         """New State instance"""
         super().__init__(**kwargs)
-        self.name = name
