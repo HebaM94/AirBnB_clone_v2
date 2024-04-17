@@ -11,15 +11,6 @@ class Review(BaseModel, Base):
     place_id = Column(String(60), ForeignKey('places.id'), nullable=False)
     user_id = Column(String(60), ForeignKey('users.id'), nullable=False)
 
-    def __init__(
-            self,
-            place_id="",
-            user_id="",
-            text="",
-            *args,
-            **kwargs):
+    def __init__(self,*args,**kwargs):
         """New Review instance"""
         super().__init__(**kwargs)
-        self.place_id = place_id
-        self.user_id = user_id
-        self.text = text
