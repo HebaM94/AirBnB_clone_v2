@@ -1,12 +1,13 @@
+#!/usr/bin/python3
+""" Module for testing file storage"""
 import unittest
 from models.base_model import BaseModel
 from models import storage
-from models.engine.file_storage import FileStorage
 import os
 
 
-class TestFileStorage(unittest.TestCase):
-    """Testing FileStorage class"""
+class test_fileStorage(unittest.TestCase):
+    """ Class to test the file storage method """
 
     def setUp(self):
         """ Set up test environment """
@@ -20,8 +21,8 @@ class TestFileStorage(unittest.TestCase):
         """ Remove storage file at end of tests """
         try:
             os.remove('file.json')
-        except Exception as e:
-            print("An error occurred while removing the file:", e)
+        except:
+            pass
 
     def test_obj_list_empty(self):
         """ __objects is initially empty """
@@ -106,7 +107,3 @@ class TestFileStorage(unittest.TestCase):
         from models.engine.file_storage import FileStorage
         print(type(storage))
         self.assertEqual(type(storage), FileStorage)
-
-
-if __name__ == '__main__':
-    unittest.main()
