@@ -9,3 +9,14 @@ class City(BaseModel, Base):
     __tablename__ = 'cities'
     name = Column(String(128), nullable=False)
     state_id = Column(String(60), ForeignKey("states.id"), nullable=False)
+    
+    def __init__(
+            self,
+            state_id="",
+            name="",
+            *args,
+            **kwargs):
+        """New City instance"""
+        super().__init__(**kwargs)
+        self.state_id = state_id
+        self.name = name
