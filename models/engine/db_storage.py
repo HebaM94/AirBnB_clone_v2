@@ -34,14 +34,14 @@ class DBStorage:
         objects = {}
         classes = (State, City, User, Place, Amenity, Review)
         if cls:
-            query = self.__session.query(cls).all()
-            for obj in query:
+            query = self.__session.query(cls)
+            for obj in query.all():
                 key = "{}.{}".format(obj.__class__.__name__, obj.id)
                 objects[key] = obj
         else:
-            for cls in classes:
-                query = self.__session.query(cls).all()
-                for obj in query:
+            for types in classes:
+                query = self.__session.query(types)
+                for obj in query.all():
                     key = "{}.{}".format(obj.__class__.__name__, obj.id)
                     objects[key] = obj
         return objects
