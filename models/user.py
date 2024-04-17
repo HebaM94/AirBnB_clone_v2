@@ -13,7 +13,7 @@ class User(BaseModel, Base):
     last_name = Column(String(128), nullable=True)
     places = relationship('Place', cascade="delete",
                           backref='user')
-    reviews = relationship('Review', cascade="delete", 
+    reviews = relationship('Review', cascade="delete",
                            backref='user')
 
     """Class defining a user"""
