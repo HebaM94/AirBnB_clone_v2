@@ -152,7 +152,7 @@ class HBNBCommand(cmd.Cmd):
 
         new_instance = HBNBCommand.classes[class_name]()
         for param_key, param_value in parameters_dict.items():
-            if  hasattr(new_instance, param_key):
+            if hasattr(new_instance, param_key):
                 setattr(new_instance, param_key, param_value)
         new_instance.save()
         print(new_instance.id)
