@@ -14,4 +14,3 @@ class Amenity(BaseModel, Base):
     def __init__(self,*args,**kwargs):
         """New Amenity instance"""
         super().__init__(**kwargs)
-
