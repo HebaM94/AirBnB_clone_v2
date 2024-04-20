@@ -10,7 +10,7 @@ from sqlalchemy import Table, MetaData
 
 if os.getenv("HBNB_TYPE_STORAGE") == "db":
     metadata = Base.metadata
-    place_amenity = Table('place_amenity', metadata,
+    association_table = Table('place_amenity', metadata,
                         Column('place_id', String(60),
                                 ForeignKey('places.id'),
                                 primary_key=True,
@@ -37,9 +37,9 @@ class Place(BaseModel, Base):
     reviews = relationship("Review", cascade="delete", backref="place")
     amenities = relationship("Amenity", secondary="place_amenity",
                              viewonly=False, overlaps="place_amenities")
+    amenity_ids = []
 
     if os.getenv("HBNB_TYPE_STORAGE") != "db":
-        amenity_ids = []
         @property
         def reviews(self):
             """getter attribute for reviews"""
@@ -58,9 +58,9 @@ class Place(BaseModel, Base):
             from models.amenity import Amenity
             amenities_lst = []
             ameninties = storage.all("Ameninty").values()
-            for ameninty in ameninties:
-                if ameninty.id in self.amenity_ids:
-                    amenities_lst.append(ameninty)
+            for amenity in ameninties:
+                if amenity.id in self.amenity_ids:
+                    amenities_lst.append(amenity)
             return amenities_lst
 
         @amenities.setter
