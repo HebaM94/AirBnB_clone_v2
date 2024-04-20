@@ -6,7 +6,7 @@ from models.amenity import Amenity
 from models.review import Review
 from sqlalchemy import Column, Integer, Float, String, ForeignKey
 from sqlalchemy.orm import relationship
-from sqlalchemy import Table, MetaData
+from sqlalchemy import Table
 
 
 metadata = Base.metadata
@@ -34,12 +34,14 @@ class Place(BaseModel, Base):
     price_by_night = Column(Integer, nullable=False, default=0)
     latitude = Column(Float, nullable=True)
     longitude = Column(Float, nullable=True)
-    reviews = relationship("Review", cascade="delete", backref="place")
-    amenities = relationship("Amenity", secondary="place_amenity",
-                             viewonly=False)
     amenity_ids = []
 
-    if os.getenv("HBNB_TYPE_STORAGE") != "db":
+    if os.getenv("HBNB_TYPE_STORAGE") == "db":
+        reviews = relationship("Review", cascade="delete", backref="place")
+        amenities = relationship("Amenity", secondary="place_amenity",
+                                    viewonly=False)
+    
+    else:
         @property
         def reviews(self):
             """getter attribute for reviews"""
