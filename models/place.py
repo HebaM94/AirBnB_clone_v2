@@ -55,7 +55,6 @@ class Place(BaseModel, Base):
         def amenities(self):
             """getter attribute for amenities"""
             from models import storage
-            from models.amenity import Amenity
             amenities_lst = []
             amenities = storage.all("Amenity").values()
             for amenity in amenities:
