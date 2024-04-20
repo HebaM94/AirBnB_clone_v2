@@ -15,6 +15,13 @@ class State(BaseModel, Base):
         cities = relationship("City", cascade="delete", backref="state")
     else:
         name = ""
+
+    def __init__(self, *args,**kwargs):
+        """New State instance"""
+        super().__init__(**kwargs)
+
+    if os.getenv("HBNB_TYPE_STORAGE") != "db":
+
         @property
         def cities(self):
             """getter attribute cities that returns the list of City instances
@@ -27,6 +34,4 @@ class State(BaseModel, Base):
                     cts.append(city)
             return cts
 
-    def __init__(self, *args,**kwargs):
-        """New State instance"""
-        super().__init__(**kwargs)
+   
