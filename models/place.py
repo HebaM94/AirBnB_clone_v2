@@ -3,22 +3,22 @@
 import os
 from models.base_model import BaseModel, Base
 from models.amenity import Amenity
+from models.review import Review
 from sqlalchemy import Column, Integer, Float, String, ForeignKey
 from sqlalchemy.orm import relationship
 from sqlalchemy import Table, MetaData
 
 
-if os.getenv("HBNB_TYPE_STORAGE") == "db":
-    metadata = Base.metadata
-    association_table = Table('place_amenity', metadata,
-                        Column('place_id', String(60),
-                                ForeignKey('places.id'),
-                                primary_key=True,
-                                nullable=False),
-                        Column('amenity_id', String(60),
-                                ForeignKey('amenities.id'),
-                                primary_key=True,
-                                nullable=False))
+metadata = Base.metadata
+association_table = Table('place_amenity', metadata,
+                    Column('place_id', String(60),
+                            ForeignKey('places.id'),
+                            primary_key=True,
+                            nullable=False),
+                    Column('amenity_id', String(60),
+                            ForeignKey('amenities.id'),
+                            primary_key=True,
+                            nullable=False))
 
 
 class Place(BaseModel, Base):
