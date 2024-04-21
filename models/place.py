@@ -69,3 +69,7 @@ class Place(BaseModel, Base):
             """Adds an amenity to this Place"""
             if isinstance(obj, Amenity):
                 self.amenity_ids.append(obj.id)
+
+    def __init__(self, *args, **kwargs):
+        """New Place instance"""
+        super().__init__(*args, **kwargs)
