@@ -9,8 +9,6 @@ from datetime import datetime
 
 
 env.hosts = ['100.25.31.166', '54.175.6.240']
-env.user = 'ubuntu'
-env.key_filename = '/path/to/your/ssh/private/key'
 
 
 def do_deploy(archive_path):
