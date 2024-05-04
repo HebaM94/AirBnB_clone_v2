@@ -18,9 +18,9 @@ def do_pack():
         if not path.isdir("versions"):
             local("sudo mkdir -p versions")
         archive_path = "versions/web_static_{}.tgz".format(date)
-        size = path.getsize(archive_path)
         print("Packing web_static to {}".format(archive_path))
         final = local("tar -czvf {} web_static".format(archive_path))
+        size = path.getsize(archive_path)
         print("web_static packed: {} -> {}Bytes".format(archive_path, size))
         return archive_path
 
