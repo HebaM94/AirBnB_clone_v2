@@ -19,8 +19,6 @@ def do_deploy(archive_path):
         return False
 
     try:
-        for host in env.hosts:
-            print("[{}] Executing task 'do_deploy'".format(host))
 
         put(archive_path, '/tmp/')
 
@@ -41,7 +39,7 @@ def do_deploy(archive_path):
         run('ln -s {} /data/web_static/current'.format(release_folder))
 
         print("New version deployed!")
-        
+
         return True
     except Exception as e:
         print(e)
