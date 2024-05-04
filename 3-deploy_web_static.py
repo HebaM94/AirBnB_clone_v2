@@ -13,10 +13,12 @@ def do_pack():
     """Generate a .tgz archive from the contents of
     the web_static folder."""
     try:
-        local("sudo mkdir -p versions")
-        date = datetime.now().strftime('%Y%m%d%H%M%S')
-        archive_path = "versions/web_static_{}.tgz".format(date)
 
+        date = datetime.now().strftime('%Y%m%d%H%M%S')
+        if not path.isdir("versions"):
+            local("sudo mkdir -p versions")
+        archive_path = "versions/web_static_{}.tgz".format(date)
+        print("Packing web_static to {}".format(archive_path))
         final = local("tar -czvf {} web_static".format(archive_path))
 
         return archive_path
@@ -64,7 +66,6 @@ def deploy():
     """
     Deploy the archive to the web servers.
     """
-    print("Packing web_static to versions/")
     archive_path = do_pack()
     if path.exists(archive_path) is False:
         return False
