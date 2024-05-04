@@ -6,6 +6,7 @@ from fabric.api import local, env, put, run
 from os import path
 from datetime import datetime
 
+
 env.hosts = ['100.25.31.166', '54.175.6.240']
 
 
@@ -48,7 +49,7 @@ def do_deploy(archive_path):
         run("rm /tmp/{}".format(archive_name))
         run("mv {}{}/web_static/*"
             " {}{}/"
-            .format(pathname,archive_folder, pathname, archive_folder))
+            .format(pathname, archive_folder, pathname, archive_folder))
         run("rm -rf {}{}/web_static"
             .format(pathname, archive_folder))
         run("rm -rf /data/web_static/current")
