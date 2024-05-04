@@ -11,9 +11,8 @@ from datetime import datetime
 def do_pack():
     """Generates a .tgz archive from the contents of the web_static folder"""
     try:
-        local("sudo mkdir -p versions").strftime("%Y%m%d%H%M%S")
-
-        date = datetime.now()
+        local("sudo mkdir -p versions")
+        date = datetime.now().strftime("%Y%m%d%H%M%S")
         file_name = "web_static_{}.tgz".format(date)
 
         final = local("tar -cvzf versions/{} web_static".format(file_name))
