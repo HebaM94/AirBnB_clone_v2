@@ -21,7 +21,8 @@ def do_pack():
 
         return archive_path
 
-    except Exception:
+    except Exception as e:
+        print(e)
         return None
 
 
@@ -35,20 +36,21 @@ def do_deploy(archive_path):
     try:
         archive_name = archive_path.split('/')[-1]
         archive_folder = archive_name.split('.')[0]
+        path = "/data/web_static/releases/"
 
         put(archive_path, "/tmp/")
-        run("mkdir -p /data/web_static/releases/{}/".format(archive_folder))
-        run("tar -xzf /tmp/{} -C /data/web_static/releases/{}/"
-            .format(archive_name, archive_folder))
+        run("mkdir -p {}{}/".format(path, archive_folder))
+        run("tar -xzf /tmp/{} -C {}{}/"
+            .format(archive_name, path, archive_folder))
         run("rm /tmp/{}".format(archive_name))
-        run("mv /data/web_static/releases/{}/web_static/*"
-            " /data/web_static/releases/{}/"
-            .format(archive_folder, archive_folder))
-        run("rm -rf /data/web_static/releases/{}/web_static"
-            .format(archive_folder))
+        run("mv {}{}/web_static/*"
+            " {}{}/"
+            .format(path,archive_folder, path, archive_folder))
+        run("rm -rf {}{}/web_static"
+            .format(path, archive_folder))
         run("rm -rf /data/web_static/current")
-        run("ln -s /data/web_static/releases/{}/ /data/web_static/current"
-            .format(archive_folder))
+        run("ln -s {}{}/ /data/web_static/current"
+            .format(path, archive_folder))
         print("New version deployed!")
 
         return True
@@ -62,6 +64,7 @@ def deploy():
     """
     Deploy the archive to the web servers.
     """
+    print("Packing web_static to versions/")
     archive_path = do_pack()
     if path.exists(archive_path) is False:
         return False
