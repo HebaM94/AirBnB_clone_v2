@@ -36,21 +36,21 @@ def do_deploy(archive_path):
     try:
         archive_name = archive_path.split('/')[-1]
         archive_folder = archive_name.split('.')[0]
-        path = "/data/web_static/releases/"
+        pathname = "/data/web_static/releases/"
 
         put(archive_path, "/tmp/")
-        run("mkdir -p {}{}/".format(path, archive_folder))
+        run("mkdir -p {}{}/".format(pathname, archive_folder))
         run("tar -xzf /tmp/{} -C {}{}/"
-            .format(archive_name, path, archive_folder))
+            .format(archive_name, pathname, archive_folder))
         run("rm /tmp/{}".format(archive_name))
         run("mv {}{}/web_static/*"
             " {}{}/"
-            .format(path,archive_folder, path, archive_folder))
+            .format(pathname,archive_folder, pathname, archive_folder))
         run("rm -rf {}{}/web_static"
-            .format(path, archive_folder))
+            .format(pathname, archive_folder))
         run("rm -rf /data/web_static/current")
         run("ln -s {}{}/ /data/web_static/current"
-            .format(path, archive_folder))
+            .format(pathname, archive_folder))
         print("New version deployed!")
 
         return True
