@@ -3,7 +3,7 @@
 web servers, using the function deploy"""
 
 from fabric.api import local, env, put, run
-from os.path import basename, exists, isdir
+from os.path import basename, exists, isdir, join
 from datetime import datetime
 
 
@@ -14,8 +14,12 @@ def do_pack():
     """Generate a .tgz archive from the contents of
     the web_static folder."""
     try:
+        if not exists("web_static"):
+            return None
+
         if isdir("versions") is False:
             local("sudo mkdir -p versions")
+
         date = datetime.now().strftime("%Y%m%d%H%M%S")
         file_name = "web_static_{}.tgz".format(date)
 
