@@ -44,9 +44,9 @@ def do_deploy(archive_path):
         run("tar -xzf /tmp/{} -C {}{}/"
             .format(archive_name, pathname, archive_folder))
         run("rm /tmp/{}".format(archive_name))
-        run("mv {}{}/web_static/*"
+        run("mv {}/web_static/*"
             " {}{}/"
-            .format(pathname, archive_folder, pathname, archive_folder))
+            .format(pathname + archive_folder, pathname, archive_folder))
         run("rm -rf {}{}/web_static"
             .format(pathname, archive_folder))
         run("rm -rf /data/web_static/current")
