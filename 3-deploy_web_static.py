@@ -2,7 +2,7 @@
 """Fabric script that creates and distributes an archive to your
 web servers, using the function deploy"""
 
-from fabric.api import local, env, put, run
+from fabric.api import local, env, put, run, lcd
 from os import path
 from datetime import datetime
 
@@ -19,9 +19,10 @@ def do_pack():
         if path.isdir("versions") is False:
             local("mkdir versions")
         archive_path = "versions/web_static_{}.tgz".format(date)
-        print("Packing web_static to {}".format(archive_path))
-        final = local("tar -czvf {} web_static".format(archive_path))
-        return archive_path
+        with lcd('versions'):
+            final = local("tar -czvf {} web_static".format(archive_path))
+        if final.succeeded:
+            return archive_path
 
     except Exception:
         return None
