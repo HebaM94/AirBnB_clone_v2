@@ -2,8 +2,8 @@
 """Fabric script that creates and distributes an archive to your
 web servers, using the function deploy"""
 
-from fabric.api import local, env, put, run, settings
-from os.path import isdir, exists
+from fabric.api import local, env, put, run
+from os.path import basename, exists
 from datetime import datetime
 
 
@@ -35,7 +35,7 @@ def do_deploy(archive_path):
 
         put(archive_path, '/tmp/')
 
-        archive_filename = os.path.basename(archive_path)
+        archive_filename = basename(archive_path)
         release_folder = '/data/web_static/releases/{}'.format(
             archive_filename[:-4])
         run('mkdir -p {}'.format(release_folder))
