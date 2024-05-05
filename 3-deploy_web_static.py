@@ -3,7 +3,7 @@
 web servers, using the function deploy"""
 
 from fabric.api import local, env, put, run, settings
-from os import path
+from os.path import isdir, exists
 from datetime import datetime
 
 
@@ -16,7 +16,7 @@ def do_pack():
     try:
 
         date = datetime.now().strftime('%Y%m%d%H%M%S')
-        if path.isdir("versions") is False:
+        if isdir("versions") is False:
             local("mkdir -p versions")
         archive_path = "versions/web_static_{}.tgz".format(date)
         local("tar -czvf {} web_static".format(archive_path))
@@ -30,7 +30,7 @@ def do_deploy(archive_path):
     """
     Distributes an archive to your web servers.
     """
-    if path.exists(archive_path) is False:
+    if not exists(archive_path):
         return False
 
     try:
@@ -38,23 +38,11 @@ def do_deploy(archive_path):
         archive_folder = archive_name.split('.')[0]
         pathname = "/data/web_static/releases/"
 
-        with settings(warn_only=True):
-            result = run("ls -l /data/web_static/releases/")
-            print("Listing contents of releases directory:")
-            print(result)
         put(archive_path, "/tmp/")
         run("mkdir -p {}{}/".format(pathname, archive_folder))
         run("tar -xzf /tmp/{} -C {}{}/"
             .format(archive_name, pathname, archive_folder))
         run("rm /tmp/{}".format(archive_name))
-        run("mv {}/web_static/*"
-            " {}{}/"
-            .format(pathname + archive_folder, pathname, archive_folder))
-        run("rm -rf {}{}/web_static"
-            .format(pathname, archive_folder))
-        run("rm -rf /data/web_static/current")
-        run("ln -s {}{}/ /data/web_static/current"
-            .format(pathname, archive_folder))
         return True
 
     except Exception as e:
