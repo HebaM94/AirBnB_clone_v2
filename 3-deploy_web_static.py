@@ -16,17 +16,14 @@ def do_pack():
     try:
 
         date = datetime.now().strftime('%Y%m%d%H%M%S')
-        if not path.isdir("versions"):
-            local("sudo mkdir -p versions")
+        if path.isdir("versions") is False:
+            local("mkdir versions")
         archive_path = "versions/web_static_{}.tgz".format(date)
         print("Packing web_static to {}".format(archive_path))
         final = local("tar -czvf {} web_static".format(archive_path))
-        size = path.getsize(archive_path)
-        print("web_static packed: {} -> {}Bytes".format(archive_path, size))
         return archive_path
 
-    except Exception as e:
-        print(e)
+    except Exception:
         return None
 
 
@@ -34,7 +31,7 @@ def do_deploy(archive_path):
     """
     Distributes an archive to your web servers.
     """
-    if not path.exists(archive_path):
+    if path.exists(archive_path) is False:
         return False
 
     try:
@@ -55,12 +52,9 @@ def do_deploy(archive_path):
         run("rm -rf /data/web_static/current")
         run("ln -s {}{}/ /data/web_static/current"
             .format(pathname, archive_folder))
-        print("New version deployed!")
-
         return True
 
     except Exception as e:
-        print(e)
         return False
 
 
@@ -71,4 +65,6 @@ def deploy():
     archive_path = do_pack()
     if path.exists(archive_path) is False:
         return False
+    if do_deploy(archive_path):
+            print("New version deployed!")
     return do_deploy(archive_path)
