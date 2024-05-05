@@ -63,8 +63,6 @@ def deploy():
     Deploy the archive to the web servers.
     """
     archive_path = do_pack()
-    if path.exists(archive_path) is False:
+    if archive_path is None:
         return False
-    if do_deploy(archive_path):
-            print("New version deployed!")
     return do_deploy(archive_path)
