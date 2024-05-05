@@ -17,12 +17,10 @@ def do_pack():
 
         date = datetime.now().strftime('%Y%m%d%H%M%S')
         if path.isdir("versions") is False:
-            local("mkdir versions")
+            local("mkdir -p versions")
         archive_path = "versions/web_static_{}.tgz".format(date)
-        with lcd('versions'):
-            final = local("tar -czvf {} web_static".format(archive_path))
-        if final.succeeded:
-            return archive_path
+        local("tar -czvf {} web_static".format(archive_path))
+        return archive_path
 
     except Exception:
         return None
