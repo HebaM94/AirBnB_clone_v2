@@ -14,17 +14,15 @@ def do_pack():
     """Generate a .tgz archive from the contents of
     the web_static folder."""
     try:
+        local("sudo mkdir -p versions")
+        date = datetime.now().strftime("%Y%m%d%H%M%S")
+        file_name = "web_static_{}.tgz".format(date)
 
-        date = datetime.now().strftime('%Y%m%d%H%M%S')
-        if isdir("versions") is False:
-            local("mkdir -p versions")
-        archive_path = "versions/web_static_{}.tgz".format(date)
-        local("tar -czvf {} web_static".format(archive_path))
-        return archive_path
+        local("tar -cvzf versions/{} web_static".format(file_name))
 
+        return "versions/{}".format(file_name)
     except Exception:
         return None
-
 
 def do_deploy(archive_path):
     """
@@ -34,19 +32,32 @@ def do_deploy(archive_path):
         return False
 
     try:
-        archive_name = archive_path.split('/')[-1]
-        archive_folder = archive_name.split('.')[0]
-        pathname = "/data/web_static/releases/"
 
-        put(archive_path, "/tmp/")
-        run("mkdir -p {}{}/".format(pathname, archive_folder))
-        run("tar -xzf /tmp/{} -C {}{}/"
-            .format(archive_name, pathname, archive_folder))
-        run("rm /tmp/{}".format(archive_name))
+        put(archive_path, '/tmp/')
+
+        archive_filename = os.path.basename(archive_path)
+        release_folder = '/data/web_static/releases/{}'.format(
+            archive_filename[:-4])
+        run('mkdir -p {}'.format(release_folder))
+        run('tar -xzf /tmp/{} -C {}'.format(archive_filename, release_folder))
+
+        run('rm /tmp/{}'.format(archive_filename))
+
+        run('mv {}/web_static/* {}'.format(release_folder, release_folder))
+
+        run('rm -rf {}/web_static'.format(release_folder))
+
+        run('rm -rf /data/web_static/current')
+
+        run('ln -s {} /data/web_static/current'.format(release_folder))
+
+        print("New version deployed!")
+
         return True
-
     except Exception as e:
+        print(e)
         return False
+
 
 
 def deploy():
