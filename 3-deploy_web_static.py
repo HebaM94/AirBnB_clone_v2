@@ -2,88 +2,74 @@
 """Fabric script that creates and distributes an archive to your
 web servers, using the function deploy"""
 
-from fabric.api import cd, env, lcd, local, put, run, task, with_settings
-from fabric.api import runs_once
-from os import path
+from fabric.api import local, env, put, run
+from os.path import basename, exists, isdir
 from datetime import datetime
 
-env.hosts = ["100.25.31.166", "54.175.6.240"]
+
+env.hosts = ['100.25.31.166', '54.175.6.240']
 
 
-@runs_once
-@with_settings(warn_only=True)
 def do_pack():
-    """ creates compressed archive file of web_static folder
-    """
+    """Generate a .tgz archive from the contents of
+    the web_static folder."""
+    try:
+        
+        if isdir("versions") is False:
+            local("sudo mkdir -p versions")
 
-    # essential variables for file name
-    file_name = "web_static_{}.tgz".format(
-            datetime.now().strftime('%Y%m%d%H%M%S'))
+        date = datetime.now().strftime("%Y%m%d%H%M%S")
+        file_name = "versions/web_static_{}.tgz".format(date)
 
-    # create directory if it doesn't exist
-    if local('test -d versions').failed:
-        local('mkdir versions')
+        local("tar -cvzf {} web_static".format(file_name))
 
-    # create compressed tar file in the versions directory
-    with lcd('versions'):
-        execute = local('tar -zcvf {} ../web_static'.format(file_name))
+        return file_name
 
-    # check cmd success and return path
-    if execute.succeeded:
-        return "versions/{}".format(file_name)
+    except Exception:
+        return None
 
 
-@with_settings(warn_only=True)
 def do_deploy(archive_path):
-    """ deploys archive files to webservers
     """
-    # essential file names
-    file_name = archive_path.split('/')[-1]
-    extract_folder = file_name.replace('.tgz', "")
-    destination = '/data/web_static/releases/'
-    full_path = '{}/{}'.format(destination, extract_folder)
-    link = "/data/web_static/current"
-
-    # check if archive file exists
-    if not path.isfile(archive_path):
+    Distributes an archive to your web servers.
+    """
+    if not exists(archive_path):
         return False
 
-    # transfer file to remote
-    if put(archive_path, "/tmp/").failed:
+    try:
+
+        put(archive_path, '/tmp/')
+
+        archive_filename = basename(archive_path)
+        release_folder = '/data/web_static/releases/{}'.format(
+            archive_filename[:-4])
+        run('mkdir -p {}'.format(release_folder))
+
+        run('tar -xzf /tmp/{} -C {}'.format(archive_filename, release_folder))
+
+        run('rm /tmp/{}'.format(archive_filename))
+
+        run('mv {}/web_static/* {}'.format(release_folder, release_folder))
+
+        run('rm -rf {}/web_static'.format(release_folder))
+
+        run('rm -rf /data/web_static/current')
+
+        run('ln -s {} /data/web_static/current'.format(release_folder))
+
+        print("New version deployed!")
+
+        return True
+    except Exception as e:
+        print(e)
         return False
 
-    # change directory and extract file
-    with cd(destination):
-        if run('mkdir {}'.format(extract_folder)).failed:
-            return False
-    with cd(full_path):
-        if run('tar -xzvf /tmp/{}'.format(file_name)).failed:
-            return False
-        # mv files and delete folder
-        if run('mv web_static/* .').failed:
-            return False
-        if run('rm -rf web_static').failed:
-            return False
 
-    # rm  archive file
-    if run('rm -rf /tmp/{}'.format(file_name)).failed:
-        return False
-
-    # create new symbolic link
-    if run('ln -sfn {} {}'.format(full_path, link)).failed:
-        return False
-
-    return True
-
-
-@task
 def deploy():
-    """ main fabric task to pack and deploy
     """
-
-    tar = do_pack()
-    if tar is None:
+    Deploy the archive to the web servers.
+    """
+    archive_path = do_pack()
+    if archive_path is None:
         return False
-
-    status = do_deploy(tar)
-    return status
+    return do_deploy(archive_path)
