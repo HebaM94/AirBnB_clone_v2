@@ -5,6 +5,7 @@ web servers, using the function deploy"""
 from fabric.api import cd, env, lcd, local, put, run, task, with_settings
 from fabric.api import runs_once
 from os import path
+from datetime import datetime
 
 env.hosts = ["100.25.31.166", "54.175.6.240"]
 
