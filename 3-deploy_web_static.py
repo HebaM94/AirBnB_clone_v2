@@ -2,8 +2,8 @@
 """Fabric script that creates and distributes an archive to your
 web servers, using the function deploy"""
 
-from fabric.api import local, env, put, run, settings
-from os import path
+from fabric.api import local, env, put, run
+from os.path import basename, exists, isdir
 from datetime import datetime
 
 
@@ -14,13 +14,16 @@ def do_pack():
     """Generate a .tgz archive from the contents of
     the web_static folder."""
     try:
+        
+        if isdir("versions") is False:
+            local("sudo mkdir -p versions")
 
-        date = datetime.now().strftime('%Y%m%d%H%M%S')
-        if path.isdir("versions") is False:
-            local("mkdir -p versions")
-        archive_path = "versions/web_static_{}.tgz".format(date)
-        local("tar -czvf {} web_static".format(archive_path))
-        return archive_path
+        date = datetime.now().strftime("%Y%m%d%H%M%S")
+        file_name = "versions/web_static_{}.tgz".format(date)
+
+        local("tar -cvzf {} web_static".format(file_name))
+
+        return file_name
 
     except Exception:
         return None
@@ -30,34 +33,33 @@ def do_deploy(archive_path):
     """
     Distributes an archive to your web servers.
     """
-    if path.exists(archive_path) is False:
+    if not exists(archive_path):
         return False
 
     try:
-        archive_name = archive_path.split('/')[-1]
-        archive_folder = archive_name.split('.')[0]
-        pathname = "/data/web_static/releases/"
 
-        with settings(warn_only=True):
-            result = run("ls -l /data/web_static/releases/")
-            print("Listing contents of releases directory:")
-            print(result)
-        put(archive_path, "/tmp/")
-        run("mkdir -p {}{}/".format(pathname, archive_folder))
-        run("tar -xzf /tmp/{} -C {}{}/"
-            .format(archive_name, pathname, archive_folder))
-        run("rm /tmp/{}".format(archive_name))
-        run("mv {}/web_static/*"
-            " {}{}/"
-            .format(pathname + archive_folder, pathname, archive_folder))
-        run("rm -rf {}{}/web_static"
-            .format(pathname, archive_folder))
-        run("rm -rf /data/web_static/current")
-        run("ln -s {}{}/ /data/web_static/current"
-            .format(pathname, archive_folder))
+        file_name = archive_path.split("/")[-1]
+        extract_folder = file_name.replace('.tgz', "")
+        file_path = "/data/web_static/releases/"
+
+        put(archive_path, '/tmp/')
+
+        run('mkdir -p {}{}/'.format(file_path, extract_folder))
+
+        run('tar -xzf /tmp/{} -C {}{}/'.format(file_name, file_path, extract_folder))
+
+        run('rm /tmp/{}'.format(file_name))
+
+        run('mv {0}{1}/web_static/* {0}{1}/'.format(file_path, extract_folder))
+
+        run('rm -rf {}{}/web_static'.format(file_path, extract_folder))
+
+        run('rm -rf /data/web_static/current')
+
+        run('ln -s {}{}/ /data/web_static/current'.format(file_path, extract_folder))
         return True
-
     except Exception as e:
+        print(e)
         return False
 
 
