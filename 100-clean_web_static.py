@@ -3,62 +3,28 @@
 using the function do_clean"""
 
 import os
-from fabric.api import cd, lcd, local, run, env, with_settings
-from fabric.api import task, runs_once
+from fabric.api import env, local, lcd, cd, run
 
-env.hosts = ["44.200.168.223", "18.204.14.103"]
-
-
-@runs_once
-def do_local(number):
-    """ local operations """
-
-    with lcd('versions'):
-        # check for number of files
-        num_files = int(local('ls -1 | wc -l', capture=True))
-
-        # check if number is greater than files in directory
-        if number >= num_files:
-            return
-
-        # compute number of files to delete
-        if number == 1 or number == 0:
-            limit = num_files - 1
-        else:
-            limit = num_files - number
-
-        # delete files
-        local("{}{}{}".format("for((i=0; i < ", limit,
-              "; i++)); do rm -rf -v $(ls -r1t | head -n 1); done"),
-              shell='/bin/bash')
+env.hosts = ['52.87.100.25.31.166.66', '54.175.6.240']
 
 
-def do_remote(number):
-    """ remote operations """
-
-    with cd('/data/web_static/releases'):
-        # check for number of files
-        num_files = int(run('ls -1 | wc -l'))
-
-        # check if number is greater than files in directory
-        if number >= num_files:
-            return
-
-        # compute number of files to delete
-        if number == 1 or number == 0:
-            limit = num_files - 1
-        else:
-            limit = num_files - number
-
-        # delete files
-        run("{}{}{}".format("for((i=0; i < ", limit,
-            "; i++)); do rm -rf -v $(ls -r1t | head -n 1); done"))
-
-
-@task
-@with_settings(warn_only=True)
 def do_clean(number=0):
-    """ fabric task to remove outdate files """
-    number = int(number)
-    do_local(number)
-    do_remote(number)
+    """Delete out-of-date archives.
+    Args:
+        number (int): The number of archives to keep.
+    If number is 0 or 1, keeps only the most recent archive. If
+    number is 2, keeps the most and second-most recent archives,
+    etc.
+    """
+    number = 1 if int(number) == 0 else int(number)
+
+    archives = sorted(os.listdir("versions"))
+    [archives.pop() for i in range(number)]
+    with lcd("versions"):
+        [local("rm ./{}".format(a)) for a in archives]
+
+    with cd("/data/web_static/releases"):
+        archives = run("ls -tr").split()
+        archives = [a for a in archives if "web_static_" in a]
+        [archives.pop() for i in range(number)]
+        [run("rm -rf ./{}".format(a)) for a in archives]
