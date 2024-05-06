@@ -39,7 +39,7 @@ def do_deploy(archive_path):
     try:
 
         file_name = archive_path.split("/")[-1]
-        extract_folder = file_name.replace('.tgz', "")
+        extract_folder = file_name.split(".")[0]
         file_path = "/data/web_static/releases/"
 
         put(archive_path, '/tmp/')
