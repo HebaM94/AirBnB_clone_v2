@@ -73,25 +73,3 @@ def deploy():
     if archive_path is None:
         return False
     return do_deploy(archive_path)
-
-def create_and_deploy_local_version():
-    """
-    Creates and deploys a new version locally.
-    """
-    # Call do_pack function to generate archive locally
-    archive_path = do_pack()
-
-    # Check if archive was created successfully
-    if archive_path is None:
-        return False
-
-    # Call do_deploy function to deploy archive locally
-    if not do_deploy(archive_path):
-        return False
-
-    print("New version deployed locally!")
-    return True
-
-
-if __name__ == "__main__":
-    create_and_deploy_local_version()
