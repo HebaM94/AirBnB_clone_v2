@@ -14,7 +14,7 @@ def do_pack():
     """Generate a .tgz archive from the contents of
     the web_static folder."""
     try:
-        
+
         if isdir("versions") is False:
             local("sudo mkdir -p versions")
 
@@ -46,7 +46,8 @@ def do_deploy(archive_path):
 
         run('mkdir -p {}{}/'.format(file_path, extract_folder))
 
-        run('tar -xzf /tmp/{} -C {}{}/'.format(file_name, file_path, extract_folder))
+        run('tar -xzf /tmp/{} -C {}{}/'.format(file_name, file_path,
+                                               extract_folder))
 
         run('rm /tmp/{}'.format(file_name))
 
@@ -56,7 +57,8 @@ def do_deploy(archive_path):
 
         run('rm -rf /data/web_static/current')
 
-        run('ln -s {}{}/ /data/web_static/current'.format(file_path, extract_folder))
+        run('ln -s {}{}/ /data/web_static/current'.format(file_path,
+                                                          extract_folder))
         return True
     except Exception as e:
         print(e)
