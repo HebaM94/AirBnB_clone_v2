@@ -22,7 +22,7 @@ def hbnb():
 def c(text):
     """print C followed by text"""
     text = text.replace('_', ' ')
-    return 'C {}'.format(escape(text))
+    return "C {}".format(escape(text))
 
 
 if __name__ == '__main__':
