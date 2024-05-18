@@ -35,7 +35,7 @@ def python(text):
     return "Python {}".format(text)
 
 
-@app.route('/number/int:<n>', strict_slashes=False)
+@app.route('/number/<int:n>', strict_slashes=False)
 def number(n):
     """n is a number only"""
     return "{:d} is a number".format(n)
