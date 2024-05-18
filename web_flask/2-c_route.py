@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """Start a Flask web application"""
 
-from flask import Flask, escape
+from flask import Flask
 
 app = Flask(__name__)
 
@@ -22,7 +22,7 @@ def hbnb():
 def c(text):
     """C followed by text"""
     text = text.replace('_', ' ')
-    return "C {}".format(escape(text))
+    return "C {}".format(text)
 
 
 if __name__ == '__main__':
