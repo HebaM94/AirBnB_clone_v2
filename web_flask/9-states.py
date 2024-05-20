@@ -20,6 +20,7 @@ def states():
     states = storage.all(State).values()
     return render_template('9-states.html', states=states)
 
+
 @app.route('/states/<id>', strict_slashes=False)
 def states_id(id):
     """display a HTML page: (inside the tag BODY)"""
@@ -32,7 +33,6 @@ def states_id(id):
                                cities=cities)
     else:
         return render_template('9-states.html', not_found=True)
-
 
 
 if __name__ == '__main__':
