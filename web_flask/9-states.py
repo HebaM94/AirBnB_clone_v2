@@ -24,7 +24,7 @@ def states():
 def states_id(id):
     """display a HTML page: (inside the tag BODY)"""
     states = storage.all(State)
-    state = states.get(state_key)
+    state = states.get(State.id)
     if state:
         cities = sorted(state.cities, key=lambda city: city.name)
         return render_template('9-states.html', state=state,
