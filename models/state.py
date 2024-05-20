@@ -11,17 +11,17 @@ class State(BaseModel, Base):
     """ State class """
     __tablename__ = 'states'
     name = Column(String(128), nullable=False)
-    if os.getenv("HBNB_TYPE_STORAGE") == "db":
-        cities = relationship("City", cascade="delete", backref="state")
-    else:
+    cities = relationship("City", cascade="delete", backref="state")
+    if os.getenv('HBNB_TYPE_STORAGE') != 'db':
         @property
         def cities(self):
-            """getter attribute cities that returns the list of City instances
-            with state_id equals to the current State.id"""
+            """ get the list of City instances whose
+                state_id equals current id
+            """
             from models import storage
-            cts = []
-            cities = storage.all("City").values()
-            for city in cities:
-                if city.state_id == self.id:
-                    cts.append(city)
-            return cts
+            cities = []
+            all_cities = storage.all(City)
+            for city in all_cities.values():
+                if city.__dict__.get('state_id') == self.id:
+                    cities.append(city)
+            return cities
