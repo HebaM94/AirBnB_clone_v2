@@ -18,7 +18,7 @@ def teardown_db(exception):
 def cities_by_states():
     """display a HTML page: (inside the tag BODY)"""
     states = storage.all(State).values()
-    return render_template('8-cities_by_states.html', states=sorted_states)
+    return render_template('8-cities_by_states.html', states=states)
 
 
 if __name__ == '__main__':
